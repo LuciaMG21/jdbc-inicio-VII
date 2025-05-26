@@ -17,8 +17,18 @@ public class Empleados {
     private Integer codigoJefe; // Puede ser null
     private String puesto;
 
+    @Override
     public String toString() {
-        return "Empleado [codigoEmpleado=" + codigoEmpleado + ", nombre=" + nombre + ", apellido1=" + apellido1 +
-                ", apellido2=" + apellido2 + "]";
+        return "Empleados{" +
+                "codigoEmpleado=" + codigoEmpleado +
+                ", nombre='" + nombre + '\'' +
+                ", apellido1='" + apellido1 + '\'' +
+                ", apellido2='" + apellido2 + '\'' +
+                ", extension='" + extension + '\'' +
+                ", email='" + email + '\'' +
+                ", codigoOficina='" + codigoOficina + '\'' +
+                ", codigoJefe=" + codigoJefe +
+                ", puesto='" + puesto + '\'' +
+                '}';
     }
 }

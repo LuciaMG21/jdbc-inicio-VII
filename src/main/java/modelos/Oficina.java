@@ -1,9 +1,7 @@
 package modelos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 // importa de lombok getter, setter y constructor.... simplifica
 @Getter
 @Setter
@@ -19,4 +17,18 @@ public class Oficina {
     private String telefono;
     private String lineaDireccion1;
     private String lineaDireccion2;
+
+    @Override
+    public String toString() {
+        return "Oficina{" +
+                "codigoOficina='" + codigoOficina + '\'' +
+                ", ciudad='" + ciudad + '\'' +
+                ", pais='" + pais + '\'' +
+                ", region='" + region + '\'' +
+                ", codigoPostal='" + codigoPostal + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", lineaDireccion1='" + lineaDireccion1 + '\'' +
+                ", lineaDireccion2='" + lineaDireccion2 + '\'' +
+                '}';
+    }
 }
