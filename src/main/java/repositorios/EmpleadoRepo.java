@@ -1,14 +1,11 @@
 package repositorios;
 
-import modelos.Empleados;
+import modelos.Empleado;
 import util.ConexionBD;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /*
  * Esta clase representa un repositorio para gestionar todas las operaciones con la BBDD que se realicen
@@ -26,34 +23,51 @@ public class EmpleadoRepo {
     private Statement obtenerSentencia() throws SQLException {
         return obtenerConexion().createStatement();
     }
-    public Empleados leerEmpleado(int id) throws SQLException {
-        Empleados empleado = new Empleados();
-        return empleado;
-    }
-    public List<Empleados> listarEmpleados() throws SQLException {
-        List<Empleados> empleados = new ArrayList<>();
 
+    public List<Empleado> listarEmpleado() throws SQLException {
+        // Creamos la variable que contendrá los datos de los empleados
+        List<Empleado> empleados = new ArrayList<>();
+        // ejecutamos la consulta dentro de un try con recursos para asegurarnos el cierre de estos
         try (Statement stmt = obtenerSentencia();
             ResultSet rs = stmt.executeQuery(LISTAR_EMPLEADOS)) {
+            // Recorremos el Resultset ara asignar cada registro a un empleado
             while (rs.next()) {
-                Empleados empleado = new Empleados();
-                empleado.setCodigoEmpleado(rs.getInt("codigo_empleado"));
-                empleado.setNombre(rs.getString("nombre"));
-                empleado.setApellido1(rs.getString("apellido1"));
-                empleado.setApellido2(rs.getString("apellido2"));
-                empleado.setEmail(rs.getString("email"));
-                empleado.setExtension(rs.getString("extension"));
-                empleado.setCodigoOficina(rs.getString("codigo_oficina"));
-                empleado.setCodigoJefe(rs.getInt("codigo_jefe"));
-                empleado.setPuesto(rs.getString("puesto"));
-                empleados.add(empleado);
+                empleados.add(cargarEmpleado(rs));
             }
-
         } catch (SQLException ex) {
             ex.printStackTrace(); // Es mejor práctica visualizar el error con logs
         }
         return empleados;
     }
 
+
+
+    public Optional <Empleado> leerEmpleado(int id) throws SQLException {
+        Empleado empleado = null; // variable inicializada con valor nulo
+        // Al poner como parametro ? evita ataques por inyección.
+        String sql = "SELECT * FROM empleado WHERE codigo_empleado = ?";
+        // Obtener empleado por id con preparedstatement
+        try(PreparedStatement stmt = obtenerConexion().prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                empleado = cargarEmpleado(rs);
+            }
+            return Optional.ofNullable(empleado);// se identifica si es null o no con ofnullable
+        }
+    }
+    private Empleado cargarEmpleado(ResultSet rs) throws SQLException {
+        Empleado empleado = new Empleado();
+        empleado.setCodigoEmpleado(rs.getInt("codigo_empleado"));
+        empleado.setNombre(rs.getString("nombre"));
+        empleado.setApellido1(rs.getString("apellido1"));
+        empleado.setApellido2(rs.getString("apellido2"));
+        empleado.setEmail(rs.getString("email"));
+        empleado.setExtension(rs.getString("extension"));
+        empleado.setCodigoOficina(rs.getString("codigo_oficina"));
+        empleado.setCodigoJefe(rs.getInt("codigo_jefe"));
+        empleado.setPuesto(rs.getString("puesto"));
+        return empleado;
+    }
 
 }

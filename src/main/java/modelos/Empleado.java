@@ -6,7 +6,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Empleados {
+public class Empleado {
     private int codigoEmpleado;
     private String nombre;
     private String apellido1;

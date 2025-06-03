@@ -28,6 +28,7 @@ public class OficinaRepo {
         // ejecutamos la consulta dentro de un try con recursos para asegurarnos el cierre de estos
         try(Statement stmt = obtenerSentencia();
             ResultSet rs = stmt.executeQuery(LISTAR_OFICINAS)) {
+            // Recorremos el Resultset ara asignar cada registro a una oficina
             while (rs.next()) {
                 Oficina oficina = new Oficina();
                 oficina.setCodigoOficina(rs.getString("codigo_oficina"));
